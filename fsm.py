@@ -46,6 +46,11 @@ class Fsm():
         self.base = Node(0, 0, '')
 
     def construct(self, words):
+        self.__construct_goto(words)
+
+        self.__construct_fail()
+
+    def __construct_goto(self, words):
         '''
         Construct the finite state machine
 
@@ -68,6 +73,12 @@ class Fsm():
                 node = node.insert(self.state, depth, c)
 
             node.output = word
+
+    def __construct_fail(self):
+        '''
+        ohoh
+        '''
+        pass
 
     def dump(self):
         '''
