@@ -43,8 +43,6 @@ class Fsm():
         then create a new one outwards for each of the remaining characters.
         '''
         for word in words:
-            i     = 0
-            depth = 0
             node  = self.base
 
             for i,c in enumerate(word):
