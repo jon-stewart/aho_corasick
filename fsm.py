@@ -35,6 +35,11 @@ class Node():
 
 
 class Fsm():
+    '''
+    Finite state machine with trie structure.
+
+    This is based off the aho-corasick dictionary string matching algorithm.
+    '''
 
     def __init__(self):
         self.state = 0
