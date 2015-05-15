@@ -47,10 +47,11 @@ class Fsm():
             depth = 0
             node  = self.base
 
-            for c in word:
+            for i,c in enumerate(word):
                 if node.goto(c):
                     node = node.goto(c)
-                    i += 1
+                else:
+                    break
 
             depth = i
             for c in word[i:]:
