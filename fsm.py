@@ -9,21 +9,26 @@ class Node():
         self.depth  = depth
         self.branch = {}
 
-    def add_output(self, output):
-        self.output = output
-
     def goto(self, c):
+        '''
+        If a branch node exists for the character return it
+        '''
         if c in self.branch.keys():
             return self.branch[c]
         else:
             return None
 
     def insert(self, state, depth, c):
+        '''
+        Create a new node, add it as a branch and return it
+        '''
         node = Node(state, depth, c)
         self.branch[c] = node
         return node
 
     def dump(self):
+        '''
+        '''
         print(self.state, self.depth, self.c, self.branch.keys(), self.output)
         for k,v in self.branch.items():
             v.dump()
@@ -57,9 +62,12 @@ class Fsm():
                 depth += 1
                 node = node.insert(self.state, depth, c)
 
-            node.add_output(word)
+            node.output = word
 
     def dump(self):
+        '''
+        Kick off the recursive printing of trie nodes
+        '''
         self.base.dump()
 
 
