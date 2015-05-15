@@ -36,14 +36,21 @@ class Fsm():
         self.base = Node(0, 0, '')
 
     def construct(self, words):
+        '''
+        Construct the finite state machine
+
+        For each word in the list traverse the trie, if no branch is available
+        then create a new one outwards for each of the remaining characters.
+        '''
         for word in words:
             i     = 0
             depth = 0
             node  = self.base
 
-            while node.goto(word[i]):
-                node = node.goto(word[i])
-                i += 1
+            for c in word:
+                if node.goto(c):
+                    node = node.goto(c)
+                    i += 1
 
             depth = i
             for c in word[i:]:
@@ -61,10 +68,11 @@ if __name__ == "__main__":
     fsm = Fsm()
 
     ls = []
-    ls.append("only")
-    ls.append("onyx")
-    ls.append("dunmps")
-    ls.append("dala")
+    ls.append("python")
+    ls.append("main")
+    ls.append("manic")
+    ls.append("pythonic")
+    ls.append("ma")
 
     fsm.construct(ls)
 
