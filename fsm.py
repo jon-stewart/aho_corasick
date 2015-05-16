@@ -8,6 +8,7 @@ class Node():
         self.output = ""
         self.depth  = depth
         self.branch = {}
+        self.fail   = None
 
     def goto(self, c):
         '''
@@ -29,7 +30,20 @@ class Node():
     def dump(self):
         '''
         '''
-        print(self.state, self.depth, self.c, self.branch.keys(), self.output)
+        s = self.state
+        d = self.depth
+        c = self.c
+        o = self.output
+
+        if self.fail:
+            fail  = self.fail.state
+
+        b = []
+        for k in self.branch:
+            b.append(k)
+
+        print("s:{0} | d:{1} | c:{2} | b:{3} | {4}".format(s, d, c, b, o))
+
         for k,v in self.branch.items():
             v.dump()
 
@@ -44,11 +58,15 @@ class Fsm():
     def __init__(self):
         self.state = 0
         self.base = Node(0, 0, '')
+        self.alphabet = ""
 
     def construct(self, words):
+
+        self.alphabet = "".join(words)
+
         self.__construct_goto(words)
 
-        self.__construct_fail()
+        #self.__construct_fail()
 
     def __construct_goto(self, words):
         '''
@@ -67,23 +85,45 @@ class Fsm():
                     break
 
             depth = i
-            for c in word[i:]:
-                self.state += 1
-                depth += 1
-                node = node.insert(self.state, depth, c)
+            if i < (len(word) - 1):
+                for c in word[i:]:
+                    self.state += 1
+                    depth += 1
+                    node = node.insert(self.state, depth, c)
 
             node.output = word
 
     def __construct_fail(self):
         '''
-        ohoh
         '''
-        pass
+        ls = []
+        ls.append(self.base)
+        while len(ls):
+            node = ls.pop(0)
+            for c in self.alphabet:
+                if node.goto(c):
+                    nxt = node.goto(c)
+                    s   = node.fail
+
+                    while s and not s.goto(c):
+                        s = s.fail
+
+                    if s:
+                        nxt.fail = s
+                    else:
+                        nxt.fail = self.base
+
+                    if s and s.fail and s.fail.output:
+                        nxt.output = s.fail.output
+
+                    ls.append(nxt)
+
 
     def dump(self):
         '''
         Kick off the recursive printing of trie nodes
         '''
+        print("-------------------")
         self.base.dump()
 
 
@@ -91,10 +131,10 @@ if __name__ == "__main__":
     fsm = Fsm()
 
     ls = []
-    ls.append("python")
+#    ls.append("python")
     ls.append("main")
-    ls.append("manic")
-    ls.append("pythonic")
+    #ls.append("manic")
+#    ls.append("pythonic")
     ls.append("ma")
 
     fsm.construct(ls)
