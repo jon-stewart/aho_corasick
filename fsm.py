@@ -8,7 +8,8 @@ class Node():
         self.output = ""
         self.depth  = depth
         self.branch = {}
-        self.fail   = None
+        self.fail   = fail
+
 
     def goto(self, c):
         '''
@@ -19,13 +20,14 @@ class Node():
         else:
             return None
 
-    def insert(self, state, depth, c, fail):
+
+    def insert(self, node):
         '''
-        Create a new node, add it as a branch and return it
+        Create a new node, add it as a branch and return it.
         '''
-        node = Node(state, depth, c, fail)
-        self.branch[c] = node
+        self.branch[node.c] = node
         return node
+
 
     def dump(self):
         '''
@@ -85,7 +87,8 @@ class Fsm():
                 if node.goto(c):
                     node = node.goto(c)
                 else:
-                    node = node.insert(self.state, i + 1, c, self.base)
+                    self.state += 1
+                    node = node.insert(Node(self.state, i + 1, c, self.base))
 
             node.output = word
 
