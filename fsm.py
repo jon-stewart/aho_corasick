@@ -126,7 +126,9 @@ class Fsm():
 
     def search(self, text):
         '''
-        Traverse the trie.  If there is no valid goto transition, iterate back
+        Traverse the trie for matches.
+        
+        If there are no valid goto transition, iterate back
         through fail transitions until either a valid goto found or we are at
         the base node.
         '''
