@@ -61,6 +61,7 @@ class Fsm():
         self.base = Node(0, 0, '', None)
         self.alphabet = ""
 
+
     def construct(self, words):
 
         self.alphabet = "".join(words)
@@ -69,9 +70,10 @@ class Fsm():
 
         self.__construct_fail()
 
+
     def __construct_goto(self, words):
         '''
-        Construct the finite state machine
+        Construct the goto transitions of the finite state machine
 
         For each word in the list traverse the trie, if no branch is available
         then create a new one outwards for each of the remaining characters.
@@ -94,8 +96,13 @@ class Fsm():
 
             node.output = word
 
+
     def __construct_fail(self):
         '''
+        Construct the failure transitions of the finite state machine.
+
+        For each node find another node in the tree that has a matching suffix
+        and a valid goto transition.
         '''
         ls = []
         ls.append(self.base)
@@ -104,18 +111,18 @@ class Fsm():
             for c in self.alphabet:
                 if node.goto(c):
                     nxt = node.goto(c)
-                    s   = node.fail
+                    f   = node.fail
 
-                    while s and not s.goto(c):
-                        s = s.fail
+                    while f and not f.goto(c):
+                        f = f.fail
 
-                    if s:
-                        nxt.fail = s.goto(c)
+                    if f:
+                        nxt.fail = f.goto(c)
                     else:
                         nxt.fail = self.base
 
-                    if s and s.fail and s.fail.output:
-                        nxt.output = s.fail.output
+                    if f and f.fail and f.fail.output:
+                        nxt.output = f.fail.output
 
                     ls.append(nxt)
 
@@ -135,6 +142,8 @@ if __name__ == "__main__":
     ls.append("hers")
     ls.append("his")
     ls.append("she")
+    ls.append("he")
+    ls.append("sh")
 
     fsm.construct(ls)
 
