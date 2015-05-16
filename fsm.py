@@ -124,6 +124,22 @@ class Fsm():
                     stack.append(nxt)
 
 
+    def search(self, text):
+        '''
+        '''
+        node = self.base
+        for i,c in enumerate(text):
+            while node and not node.goto(c):
+                node = node.fail
+            if not node:
+                node = self.base
+            else:
+                node = node.goto(c)
+
+            if node.output:
+                print(i, node.output)
+
+
     def dump(self):
         '''
         Kick off the recursive printing of trie nodes
@@ -146,3 +162,7 @@ if __name__ == "__main__":
     fsm.construct(ls)
 
     fsm.dump()
+
+    print("=============")
+
+    fsm.search("well now this is a strange story about hershe days shes hein today hers")
