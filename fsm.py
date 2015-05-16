@@ -85,14 +85,7 @@ class Fsm():
                 if node.goto(c):
                     node = node.goto(c)
                 else:
-                    break
-
-            depth = i
-            if i < (len(word) - 1):
-                for c in word[i:]:
-                    self.state += 1
-                    depth += 1
-                    node = node.insert(self.state, depth, c, self.base)
+                    node = node.insert(self.state, i + 1, c, self.base)
 
             node.output = word
 
@@ -144,6 +137,7 @@ if __name__ == "__main__":
     ls.append("she")
     ls.append("he")
     ls.append("sh")
+    ls.append("shes")
 
     fsm.construct(ls)
 
