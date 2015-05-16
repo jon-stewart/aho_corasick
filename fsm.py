@@ -2,7 +2,7 @@
 
 class Node():
 
-    def __init__(self, state, depth, c):
+    def __init__(self, state, depth, c, fail):
         self.state  = state
         self.c      = c 
         self.output = ""
@@ -19,11 +19,11 @@ class Node():
         else:
             return None
 
-    def insert(self, state, depth, c):
+    def insert(self, state, depth, c, fail):
         '''
         Create a new node, add it as a branch and return it
         '''
-        node = Node(state, depth, c)
+        node = Node(state, depth, c, fail)
         self.branch[c] = node
         return node
 
@@ -34,15 +34,16 @@ class Node():
         d = self.depth
         c = self.c
         o = self.output
+        f = ''
 
         if self.fail:
-            fail  = self.fail.state
+            f = self.fail.state
 
         b = []
         for k in self.branch:
             b.append(k)
 
-        print("s:{0} | d:{1} | c:{2} | b:{3} | {4}".format(s, d, c, b, o))
+        print("s:{0} | d:{1} | c:{2} | f:{3} | b:{4} | {5}".format(s, d, c, f, b, o))
 
         for k,v in self.branch.items():
             v.dump()
@@ -57,7 +58,7 @@ class Fsm():
 
     def __init__(self):
         self.state = 0
-        self.base = Node(0, 0, '')
+        self.base = Node(0, 0, '', None)
         self.alphabet = ""
 
     def construct(self, words):
@@ -66,7 +67,7 @@ class Fsm():
 
         self.__construct_goto(words)
 
-        #self.__construct_fail()
+        self.__construct_fail()
 
     def __construct_goto(self, words):
         '''
@@ -89,7 +90,7 @@ class Fsm():
                 for c in word[i:]:
                     self.state += 1
                     depth += 1
-                    node = node.insert(self.state, depth, c)
+                    node = node.insert(self.state, depth, c, self.base)
 
             node.output = word
 
@@ -109,7 +110,7 @@ class Fsm():
                         s = s.fail
 
                     if s:
-                        nxt.fail = s
+                        nxt.fail = s.goto(c)
                     else:
                         nxt.fail = self.base
 
@@ -131,11 +132,9 @@ if __name__ == "__main__":
     fsm = Fsm()
 
     ls = []
-#    ls.append("python")
-    ls.append("main")
-    #ls.append("manic")
-#    ls.append("pythonic")
-    ls.append("ma")
+    ls.append("hers")
+    ls.append("his")
+    ls.append("she")
 
     fsm.construct(ls)
 
