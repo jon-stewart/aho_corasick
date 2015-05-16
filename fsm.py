@@ -65,7 +65,8 @@ class Fsm():
 
 
     def construct(self, words):
-
+        '''
+        '''
         self.alphabet = "".join(words)
 
         self.__construct_goto(words)
@@ -100,10 +101,10 @@ class Fsm():
         For each node find another node in the tree that has a matching suffix
         and a valid goto transition.
         '''
-        ls = []
-        ls.append(self.base)
-        while len(ls):
-            node = ls.pop(0)
+        stack = []
+        stack.append(self.base)
+        while len(stack):
+            node = stack.pop(0)
             for c in self.alphabet:
                 if node.goto(c):
                     nxt = node.goto(c)
@@ -120,7 +121,7 @@ class Fsm():
                     if f and f.fail and f.fail.output:
                         nxt.output = f.fail.output
 
-                    ls.append(nxt)
+                    stack.append(nxt)
 
 
     def dump(self):
