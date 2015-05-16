@@ -126,6 +126,9 @@ class Fsm():
 
     def search(self, text):
         '''
+        Traverse the trie.  If there is no valid goto transition, iterate back
+        through fail transitions until either a valid goto found or we are at
+        the base node.
         '''
         node = self.base
         for i,c in enumerate(text):
@@ -162,7 +165,5 @@ if __name__ == "__main__":
     fsm.construct(ls)
 
     fsm.dump()
-
-    print("=============")
 
     fsm.search("well now this is a strange story about hershe days shes hein today hers")
